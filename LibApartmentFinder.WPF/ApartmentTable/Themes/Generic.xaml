@@ -1,0 +1,266 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:akli="clr-namespace:LibApartmentFinder.WPF.ApartmentKindList"
+                    xmlns:local="clr-namespace:LibApartmentFinder.WPF.ApartmentTable"
+                    xmlns:rli="clr-namespace:LibApartmentFinder.WPF.RatingList"
+                    xmlns:rta="clr-namespace:LibApartmentFinder.WPF.RenterTable"
+                    xmlns:sli="clr-namespace:LibApartmentFinder.WPF.StateList"
+                    xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
+    <Style TargetType="{x:Type local:ApartmentTable}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type local:ApartmentTable}">
+                    <Border Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}">
+                        <Grid DataContext="{Binding Path=ApartmentTableDataContext, RelativeSource={RelativeSource TemplatedParent}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="30" />
+                                <RowDefinition Height="40" />
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Menu Grid.Row="0">
+                                <MenuItem Command="{Binding Path=ReloadApartments, Mode=OneTime}" ToolTip="Refresh">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Refresh.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Command="{Binding Path=SaveApartments, Mode=OneTime}" ToolTip="Save">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Save.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Command="{Binding Path=DeleteApartment, Mode=OneTime}" ToolTip="Delete">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Delete.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                                <MenuItem Command="{Binding Path=OpenInBrowser, Mode=OneTime}" ToolTip="Open in Browser">
+                                    <MenuItem.Icon>
+                                        <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Webbrowser.png" />
+                                    </MenuItem.Icon>
+                                </MenuItem>
+                            </Menu>
+                            <WrapPanel Grid.Row="1">
+                                <TextBlock Margin="5,5" Text="Search for:" />
+                                <ComboBox Margin="5,5" />
+                                <TextBox Width="200" Margin="5,5" />
+                                <Button Margin="5,5" Command="{Binding Path=SearchApartments, Mode=OneTime}">
+                                    <Image Width="16"
+                                           Height="16"
+                                           Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Search.png" />
+                                </Button>
+                            </WrapPanel>
+                            <DataGrid Grid.Row="2"
+                                      AutoGenerateColumns="False"
+                                      CanUserDeleteRows="False"
+                                      ItemsSource="{Binding Path=ApartmentListView,
+                                                            Mode=TwoWay}"
+                                      SelectedItem="{Binding Path=SelectedApartment,
+                                                             Mode=TwoWay,
+                                                             UpdateSourceTrigger=PropertyChanged}"
+                                      SelectionMode="Single">
+                                <DataGrid.Columns>
+                                    <DataGridTemplateColumn Width="50"
+                                                            CanUserSort="True"
+                                                            Header="PLZ"
+                                                            SortMemberPath="PLZ">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=PLZ, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Path=PLZ, Mode=TwoWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="100"
+                                                            CanUserSort="True"
+                                                            Header="Place"
+                                                            SortMemberPath="Place">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Place, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Path=Place, Mode=TwoWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="150"
+                                                            CanUserSort="True"
+                                                            Header="Street"
+                                                            SortMemberPath="Street">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Street, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Path=Street, Mode=TwoWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="50"
+                                                            CanUserSort="True"
+                                                            Header="Streetnumber"
+                                                            SortMemberPath="Streetnumber">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Streetnumber, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Path=Streetnumber, Mode=TwoWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="200"
+                                                            CanUserSort="True"
+                                                            Header="Source"
+                                                            SortMemberPath="Source">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Source, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Path=Source, Mode=TwoWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="150"
+                                                            CanUserSort="True"
+                                                            Header="Apartmentkind"
+                                                            SortMemberPath="ApartmentKind">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=ApartmentKind.Description}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <akli:ApartmentKindList DataContext="{Binding Path=DataContext.ApartmentKindListDataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="200" Header="Renter">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Renter.Name}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <rta:RenterTable DataContext="{Binding Path=DataContext.RenterTableDataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}">
+                                                    <rta:RenterTable.Template>
+                                                        <ControlTemplate>
+                                                            <StackPanel Orientation="Horizontal">
+                                                                <ComboBox Width="150"
+                                                                          DisplayMemberPath="Name"
+                                                                          ItemsSource="{Binding Path=RenterListView,
+                                                                                                Mode=OneWay}"
+                                                                          SelectedItem="{Binding Path=SelectedRenter,
+                                                                                                 Mode=TwoWay}" />
+                                                                <Button Margin="5,5"
+                                                                        Command="{Binding Path=LoadRenters,
+                                                                                          Mode=OneTime}"
+                                                                        Content="Reload" />
+                                                            </StackPanel>
+                                                        </ControlTemplate>
+                                                    </rta:RenterTable.Template>
+                                                </rta:RenterTable>
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="50"
+                                                            CanUserSort="True"
+                                                            Header="Size"
+                                                            SortMemberPath="Size">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Size, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <xctk:ByteUpDown Value="{Binding Path=Size, Mode=TwoWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="50"
+                                                            CanUserSort="True"
+                                                            Header="Price"
+                                                            SortMemberPath="Price">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Price, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <xctk:DecimalUpDown Increment=".5" Value="{Binding Path=Price, Mode=TwoWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="300"
+                                                            CanUserSort="True"
+                                                            Header="Comment"
+                                                            SortMemberPath="Comment">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Comment, Mode=OneWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <TextBox Text="{Binding Path=Comment, Mode=TwoWay}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="100"
+                                                            CanUserSort="True"
+                                                            Header="Rating"
+                                                            SortMemberPath="Rating">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=Rating.Description}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <rli:RatingList DataContext="{Binding Path=DataContext.RatingListDataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                    <DataGridTemplateColumn Width="200"
+                                                            CanUserSort="True"
+                                                            Header="State"
+                                                            SortMemberPath="State">
+                                        <DataGridTemplateColumn.CellTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding Path=State.Description}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellTemplate>
+                                        <DataGridTemplateColumn.CellEditingTemplate>
+                                            <DataTemplate>
+                                                <sli:StateList DataContext="{Binding Path=DataContext.StateListDataContext, RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=DataGrid}}" />
+                                            </DataTemplate>
+                                        </DataGridTemplateColumn.CellEditingTemplate>
+                                    </DataGridTemplateColumn>
+                                </DataGrid.Columns>
+                            </DataGrid>
+                        </Grid>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

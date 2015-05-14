@@ -1,0 +1,40 @@
+﻿using LibApartmentFinder.WPF.ApartmentTable.ViewModels;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Documents;
+using System.Windows.Input;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
+using System.Windows.Shapes;
+
+namespace LibApartmentFinder.WPF.ApartmentTable
+{
+    public class ApartmentTable : Control
+    {
+        public static DependencyProperty ApartmentTableDataContextProperty = DependencyProperty.Register("ApartmentTableDataContext", typeof(IApartmentTableViewModel), typeof(ApartmentTable));
+
+        public IApartmentTableViewModel ApartmentTableDataContext
+        {
+            get
+            {
+                return (IApartmentTableViewModel)this.GetValue(ApartmentTable.ApartmentTableDataContextProperty);
+            }
+            set
+            {
+                this.SetValue(ApartmentTable.ApartmentTableDataContextProperty, (IApartmentTableViewModel)value);
+            }
+        }
+
+        static ApartmentTable()
+        {
+            DefaultStyleKeyProperty.OverrideMetadata(typeof(ApartmentTable), new FrameworkPropertyMetadata(typeof(ApartmentTable)));
+        }
+    }
+}

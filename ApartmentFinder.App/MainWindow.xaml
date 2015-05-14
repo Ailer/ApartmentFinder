@@ -1,0 +1,19 @@
+﻿<Window x:Class="ApartmentFinder.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:ctrls="http://www.myControls.de"
+        Title="MainWindow"
+        Width="525"
+        Height="350"
+        WindowState="Maximized">
+    <Grid>
+        <TabControl>
+            <TabItem Header="Apartments">
+                <ctrls:ApartmentTable ApartmentTableDataContext="{Binding Path=ApartmentTableDataContext, Mode=TwoWay}" />
+            </TabItem>
+            <TabItem Header="Renters">
+                <ctrls:RenterTable RenterTableDataContext="{Binding Path=RenterTableDataContext, Mode=TwoWay}" />
+            </TabItem>
+        </TabControl>
+    </Grid>
+</Window>

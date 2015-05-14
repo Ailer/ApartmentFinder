@@ -1,0 +1,361 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="ApartmentDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Apartment">
+          <Key>
+            <PropertyRef Name="ApartmentID" />
+          </Key>
+          <Property Name="ApartmentID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="PLZ" Type="char" MaxLength="5" Nullable="false" />
+          <Property Name="Place" Type="nvarchar" MaxLength="70" Nullable="false" />
+          <Property Name="Street" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Streetnumber" Type="nvarchar" MaxLength="7" Nullable="false" />
+          <Property Name="Price" Type="decimal" Precision="18" Scale="2" />
+          <Property Name="Size" Type="tinyint" />
+          <Property Name="Startdate" Type="date" />
+          <Property Name="Enddate" Type="date" />
+          <Property Name="Comment" Type="nvarchar(max)" />
+          <Property Name="StateID" Type="int" Nullable="false" />
+          <Property Name="ApartmentKindID" Type="int" Nullable="false" />
+          <Property Name="RenterID" Type="int" Nullable="false" />
+          <Property Name="RatingID" Type="int" />
+          <Property Name="Source" Type="nvarchar" MaxLength="100" />
+        </EntityType>
+        <EntityType Name="ApartmentKind">
+          <Key>
+            <PropertyRef Name="ApartmentKindID" />
+          </Key>
+          <Property Name="ApartmentKindID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Rating">
+          <Key>
+            <PropertyRef Name="RatingID" />
+          </Key>
+          <Property Name="RatingID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="30" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Renter">
+          <Key>
+            <PropertyRef Name="RenterID" />
+          </Key>
+          <Property Name="RenterID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Name" Type="nvarchar" MaxLength="60" Nullable="false" />
+          <Property Name="EMail" Type="nvarchar" MaxLength="70" />
+          <Property Name="Mobilenumber" Type="nvarchar" MaxLength="20" />
+          <Property Name="Telephonenumber" Type="nvarchar" MaxLength="20" />
+        </EntityType>
+        <EntityType Name="State">
+          <Key>
+            <PropertyRef Name="StateID" />
+          </Key>
+          <Property Name="StateID" Type="int" Nullable="false" />
+          <Property Name="Description" Type="nvarchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_Apartment_ApartmentKind">
+          <End Role="ApartmentKind" Type="Self.ApartmentKind" Multiplicity="1" />
+          <End Role="Apartment" Type="Self.Apartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApartmentKind">
+              <PropertyRef Name="ApartmentKindID" />
+            </Principal>
+            <Dependent Role="Apartment">
+              <PropertyRef Name="ApartmentKindID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Apartment_Rating">
+          <End Role="Rating" Type="Self.Rating" Multiplicity="0..1" />
+          <End Role="Apartment" Type="Self.Apartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rating">
+              <PropertyRef Name="RatingID" />
+            </Principal>
+            <Dependent Role="Apartment">
+              <PropertyRef Name="RatingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Apartment_Renter">
+          <End Role="Renter" Type="Self.Renter" Multiplicity="1" />
+          <End Role="Apartment" Type="Self.Apartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Renter">
+              <PropertyRef Name="RenterID" />
+            </Principal>
+            <Dependent Role="Apartment">
+              <PropertyRef Name="RenterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Apartment_State">
+          <End Role="State" Type="Self.State" Multiplicity="1" />
+          <End Role="Apartment" Type="Self.Apartment" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="StateID" />
+            </Principal>
+            <Dependent Role="Apartment">
+              <PropertyRef Name="StateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="ApartmentDBModelStoreContainer">
+          <EntitySet Name="Apartment" EntityType="Self.Apartment" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ApartmentKind" EntityType="Self.ApartmentKind" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Rating" EntityType="Self.Rating" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Renter" EntityType="Self.Renter" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="State" EntityType="Self.State" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_Apartment_ApartmentKind" Association="Self.FK_Apartment_ApartmentKind">
+            <End Role="ApartmentKind" EntitySet="ApartmentKind" />
+            <End Role="Apartment" EntitySet="Apartment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Apartment_Rating" Association="Self.FK_Apartment_Rating">
+            <End Role="Rating" EntitySet="Rating" />
+            <End Role="Apartment" EntitySet="Apartment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Apartment_Renter" Association="Self.FK_Apartment_Renter">
+            <End Role="Renter" EntitySet="Renter" />
+            <End Role="Apartment" EntitySet="Apartment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Apartment_State" Association="Self.FK_Apartment_State">
+            <End Role="State" EntitySet="State" />
+            <End Role="Apartment" EntitySet="Apartment" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="ApartmentDBModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="ApartmentDBDataContext" p1:LazyLoadingEnabled="false">
+          <EntitySet Name="EF_Apartment" EntityType="ApartmentDBModel.ApartmentEntity" />
+          <EntitySet Name="EF_Rating" EntityType="ApartmentDBModel.RatingEntity" />
+          <EntitySet Name="EF_Renter" EntityType="ApartmentDBModel.RenterEntity" />
+          <EntitySet Name="EF_State" EntityType="ApartmentDBModel.StateEntity" />
+          <AssociationSet Name="FK_Apartment_Rating" Association="ApartmentDBModel.FK_Apartment_Rating">
+            <End Role="Rating" EntitySet="EF_Rating" />
+            <End Role="Apartment" EntitySet="EF_Apartment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Apartment_Renter" Association="ApartmentDBModel.FK_Apartment_Renter">
+            <End Role="Renter" EntitySet="EF_Renter" />
+            <End Role="Apartment" EntitySet="EF_Apartment" />
+          </AssociationSet>
+          <AssociationSet Name="FK_Apartment_State" Association="ApartmentDBModel.FK_Apartment_State">
+            <End Role="State" EntitySet="EF_State" />
+            <End Role="Apartment" EntitySet="EF_Apartment" />
+          </AssociationSet>
+          <EntitySet Name="EF_ApartmentKind" EntityType="ApartmentDBModel.ApartmentKindEntity" />
+          <AssociationSet Name="FK_Apartment_ApartmentKind" Association="ApartmentDBModel.FK_Apartment_ApartmentKind">
+            <End Role="ApartmentKind" EntitySet="EF_ApartmentKind" />
+            <End Role="ApartmentEntity" EntitySet="EF_Apartment" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="ApartmentEntity">
+          <Key>
+            <PropertyRef Name="ApartmentID" />
+          </Key>
+          <Property Name="ApartmentID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="PLZ" Type="String" Nullable="false" MaxLength="5" Unicode="false" FixedLength="true" />
+          <Property Name="Place" Type="String" Nullable="false" MaxLength="70" Unicode="true" FixedLength="false" />
+          <Property Name="Street" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <Property Name="Price" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="Size" Type="Byte" />
+          <Property Name="Startdate" Type="DateTime" Precision="0" />
+          <Property Name="Enddate" Type="DateTime" Precision="0" />
+          <Property Name="Comment" Type="String" MaxLength="Max" Unicode="true" FixedLength="false" />
+          <Property Name="StateID" Type="Int32" Nullable="false" />
+          <Property Name="ApartmentKindID" Type="Int32" Nullable="false" />
+          <Property Name="RenterID" Type="Int32" Nullable="false" />
+          <Property Name="RatingID" Type="Int32" />
+          <NavigationProperty Name="Rating" Relationship="ApartmentDBModel.FK_Apartment_Rating" FromRole="Apartment" ToRole="Rating" />
+          <NavigationProperty Name="Renter" Relationship="ApartmentDBModel.FK_Apartment_Renter" FromRole="Apartment" ToRole="Renter" />
+          <NavigationProperty Name="State" Relationship="ApartmentDBModel.FK_Apartment_State" FromRole="Apartment" ToRole="State" />
+          <NavigationProperty Name="ApartmentKind" Relationship="ApartmentDBModel.FK_Apartment_ApartmentKind" FromRole="ApartmentEntity" ToRole="ApartmentKind" />
+          <Property Type="String" Name="Streetnumber" Nullable="false" MaxLength="7" FixedLength="false" Unicode="true" />
+          <Property Name="Source" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
+        </EntityType>
+        <EntityType Name="RatingEntity">
+          <Key>
+            <PropertyRef Name="RatingID" />
+          </Key>
+          <Property Name="RatingID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="30" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Apartments" Relationship="ApartmentDBModel.FK_Apartment_Rating" FromRole="Rating" ToRole="Apartment" />
+        </EntityType>
+        <EntityType Name="RenterEntity">
+          <Key>
+            <PropertyRef Name="RenterID" />
+          </Key>
+          <Property Name="RenterID" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
+          <Property Name="Name" Type="String" Nullable="false" MaxLength="60" Unicode="true" FixedLength="false" />
+          <Property Name="EMail" Type="String" MaxLength="70" Unicode="true" FixedLength="false" />
+          <Property Name="Mobilenumber" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <Property Name="Telephonenumber" Type="String" MaxLength="20" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Apartments" Relationship="ApartmentDBModel.FK_Apartment_Renter" FromRole="Renter" ToRole="Apartment" />
+        </EntityType>
+        <EntityType Name="StateEntity">
+          <Key>
+            <PropertyRef Name="StateID" />
+          </Key>
+          <Property Name="StateID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" Unicode="true" FixedLength="false" />
+          <NavigationProperty Name="Apartments" Relationship="ApartmentDBModel.FK_Apartment_State" FromRole="State" ToRole="Apartment" />
+        </EntityType>
+        <Association Name="FK_Apartment_Rating">
+          <End Role="Rating" Type="ApartmentDBModel.RatingEntity" Multiplicity="0..1" />
+          <End Role="Apartment" Type="ApartmentDBModel.ApartmentEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Rating">
+              <PropertyRef Name="RatingID" />
+            </Principal>
+            <Dependent Role="Apartment">
+              <PropertyRef Name="RatingID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Apartment_Renter">
+          <End Role="Renter" Type="ApartmentDBModel.RenterEntity" Multiplicity="1" />
+          <End Role="Apartment" Type="ApartmentDBModel.ApartmentEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Renter">
+              <PropertyRef Name="RenterID" />
+            </Principal>
+            <Dependent Role="Apartment">
+              <PropertyRef Name="RenterID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_Apartment_State">
+          <End Role="State" Type="ApartmentDBModel.StateEntity" Multiplicity="1" />
+          <End Role="Apartment" Type="ApartmentDBModel.ApartmentEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="State">
+              <PropertyRef Name="StateID" />
+            </Principal>
+            <Dependent Role="Apartment">
+              <PropertyRef Name="StateID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityType Name="ApartmentKindEntity">
+          <Key>
+            <PropertyRef Name="ApartmentKindID" />
+          </Key>
+          <Property Name="ApartmentKindID" Type="Int32" Nullable="false" />
+          <Property Name="Description" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="true" />
+          <NavigationProperty Name="Apartment" Relationship="ApartmentDBModel.FK_Apartment_ApartmentKind" FromRole="ApartmentKind" ToRole="ApartmentEntity" />
+        </EntityType>
+        <Association Name="FK_Apartment_ApartmentKind">
+          <End Type="ApartmentDBModel.ApartmentKindEntity" Role="ApartmentKind" Multiplicity="1" />
+          <End Type="ApartmentDBModel.ApartmentEntity" Role="ApartmentEntity" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ApartmentKind">
+              <PropertyRef Name="ApartmentKindID" />
+            </Principal>
+            <Dependent Role="ApartmentEntity">
+              <PropertyRef Name="ApartmentKindID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="ApartmentDBModelStoreContainer" CdmEntityContainer="ApartmentDBDataContext">
+          <EntitySetMapping Name="EF_Apartment">
+            <EntityTypeMapping TypeName="ApartmentDBModel.ApartmentEntity">
+              <MappingFragment StoreEntitySet="Apartment">
+                <ScalarProperty Name="Source" ColumnName="Source" />
+                <ScalarProperty Name="Streetnumber" ColumnName="Streetnumber" />
+                <ScalarProperty Name="ApartmentID" ColumnName="ApartmentID" />
+                <ScalarProperty Name="PLZ" ColumnName="PLZ" />
+                <ScalarProperty Name="Place" ColumnName="Place" />
+                <ScalarProperty Name="Street" ColumnName="Street" />
+                <ScalarProperty Name="Price" ColumnName="Price" />
+                <ScalarProperty Name="Size" ColumnName="Size" />
+                <ScalarProperty Name="Startdate" ColumnName="Startdate" />
+                <ScalarProperty Name="Enddate" ColumnName="Enddate" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="ApartmentKindID" ColumnName="ApartmentKindID" />
+                <ScalarProperty Name="RenterID" ColumnName="RenterID" />
+                <ScalarProperty Name="RatingID" ColumnName="RatingID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EF_Rating">
+            <EntityTypeMapping TypeName="ApartmentDBModel.RatingEntity">
+              <MappingFragment StoreEntitySet="Rating">
+                <ScalarProperty Name="RatingID" ColumnName="RatingID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EF_Renter">
+            <EntityTypeMapping TypeName="ApartmentDBModel.RenterEntity">
+              <MappingFragment StoreEntitySet="Renter">
+                <ScalarProperty Name="RenterID" ColumnName="RenterID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="EMail" ColumnName="EMail" />
+                <ScalarProperty Name="Mobilenumber" ColumnName="Mobilenumber" />
+                <ScalarProperty Name="Telephonenumber" ColumnName="Telephonenumber" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EF_State">
+            <EntityTypeMapping TypeName="ApartmentDBModel.StateEntity">
+              <MappingFragment StoreEntitySet="State">
+                <ScalarProperty Name="StateID" ColumnName="StateID" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="EF_ApartmentKind">
+            <EntityTypeMapping TypeName="ApartmentDBModel.ApartmentKindEntity">
+              <MappingFragment StoreEntitySet="ApartmentKind">
+                <ScalarProperty Name="Description" ColumnName="Description" />
+                <ScalarProperty Name="ApartmentKindID" ColumnName="ApartmentKindID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Kein" />
+        <DesignerProperty Name="UseLegacyProvider" Value="True" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams>
+      <Diagram DiagramId="ebdf5348094c46469733f940e8c0828f" Name="Diagramm1">
+        <EntityTypeShape EntityType="ApartmentDBModel.ApartmentEntity" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApartmentDBModel.RatingEntity" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApartmentDBModel.RenterEntity" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApartmentDBModel.StateEntity" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
+        <AssociationConnector Association="ApartmentDBModel.FK_Apartment_Rating" ManuallyRouted="false" />
+        <AssociationConnector Association="ApartmentDBModel.FK_Apartment_Renter" ManuallyRouted="false" />
+        <AssociationConnector Association="ApartmentDBModel.FK_Apartment_State" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="ApartmentDBModel.ApartmentKindEntity" Width="1.5" PointX="5.375" PointY="0.875" />
+        <AssociationConnector Association="ApartmentDBModel.FK_Apartment_ApartmentKind" />
+      </Diagram>
+    </Diagrams>
+  </Designer>
+</edmx:Edmx>

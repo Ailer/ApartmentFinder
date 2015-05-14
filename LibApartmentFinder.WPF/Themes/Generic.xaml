@@ -1,0 +1,9 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:my="http://www.myControls.de">
+    <ResourceDictionary.MergedDictionaries>
+        <ResourceDictionary Source="/LibApartmentFinder.WPF;component/ApartmentTable/Themes/Generic.xaml" />
+        <ResourceDictionary Source="/LibApartmentFinder.WPF;component/RenterTable/Themes/Generic.xaml" />
+        <ResourceDictionary Source="/LibApartmentFinder.WPF;component/RatingList/Themes/Generic.xaml" />
+        <ResourceDictionary Source="/LibApartmentFinder.WPF;component/ApartmentKindList/Themes/Generic.xaml" />
+        <ResourceDictionary Source="/LibApartmentFinder.WPF;component/StateList/Themes/Generic.xaml" />
+    </ResourceDictionary.MergedDictionaries>
+</ResourceDictionary>
