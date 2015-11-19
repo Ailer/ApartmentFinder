@@ -2,12 +2,13 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:ctrls="http://www.myControls.de"
-        Title="MainWindow"
+        Title="Apartment Finder"
         Width="525"
         Height="350"
+        Icon="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Icon.ico"
         WindowState="Maximized">
     <Grid>
-        <TabControl>
+        <TabControl SelectedIndex="{Binding Path=SelectedTab}">
             <TabItem Header="Apartments">
                 <ctrls:ApartmentTable ApartmentTableDataContext="{Binding Path=ApartmentTableDataContext, Mode=TwoWay}" />
             </TabItem>

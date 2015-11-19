@@ -15,7 +15,7 @@ namespace LibApartmentFinder.Data.Provider
         #region - Vars
 
         private string _apartmentDBConnectionString;
-        private ApartmentDBDataContext _apartmentDBDataContext;
+        private static ApartmentDBDataContext _apartmentDBDataContext;
 
         #endregion
         #endregion
@@ -73,12 +73,13 @@ namespace LibApartmentFinder.Data.Provider
         /// <returns></returns>
         public virtual ApartmentDBDataContext GetDataContext()
         {
-            if (this._apartmentDBDataContext == null)
+            if (_apartmentDBDataContext == null)
             {
-                this._apartmentDBDataContext = new ApartmentDBDataContext(this._apartmentDBConnectionString);
+                _apartmentDBDataContext = new ApartmentDBDataContext(this._apartmentDBConnectionString);
+               
             }
 
-            return this._apartmentDBDataContext;
+            return _apartmentDBDataContext;
         }
         #endregion
         #endregion

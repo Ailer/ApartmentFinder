@@ -44,7 +44,9 @@ namespace LibApartmentFinder.WPF.ApartmentTable.Services
 
         public void SaveApartments(IList<ApartmentEntity> apartments)
         {
-            throw new NotImplementedException();
+            Guard.ArgumentNotNull(apartments, "apartments");
+
+            this._apartmentDBRepository.SaveApartments(apartments);
         }
 
         public void DeleteApartment(int apartmentId)

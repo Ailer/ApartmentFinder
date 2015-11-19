@@ -20,6 +20,9 @@ using System.Windows.Data;
 using System.Windows.Input;
 using LibApartmentFinder.Infastructure.Helpers;
 using System.Windows;
+using Microsoft.Practices.ObjectBuilder2;
+using System.Diagnostics;
+using System.Net;
 
 namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
 {
@@ -50,6 +53,30 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
         private ICommand _saveApartments;
 
         #endregion
+
+        #region - Functions
+
+        private bool IsUrlValid(string url)
+        {
+            try
+            {
+                Uri adress = new Uri(url, UriKind.RelativeOrAbsolute);
+                return adress.Host != null;
+            }
+            catch
+            {
+                return false;
+            }
+        }
+
+        private void RaiseOnGoToRenter()
+        {
+            if (this.OnGoToRenter != null)
+            {
+                this.OnGoToRenter(this.SelectedApartment.Renter);
+            }
+        }
+        #endregion
         #endregion
 
         #region - Protected
@@ -64,6 +91,105 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
             this.ApartmentListView = CollectionViewSource.GetDefaultView(this.ApartmentList);
         }
 
+        protected void DeleteApartmentExecute()
+        {
+            MessageBoxResult result = MessageBox.Show("Do you want to delete the selected apartment?", "Delete Apartment", MessageBoxButton.YesNo);
+
+            if (result == MessageBoxResult.Yes)
+            {
+                this._apartmentTableService.DeleteApartment(this._selectedApartment.ApartmentID);
+                this._apartmentList.Remove(this._selectedApartment);
+            }
+        }
+
+        protected bool DeleteApartmentCanExecute()
+        {
+            return this._selectedApartment != null;
+        }
+
+        protected void SearchApartmentExecute()
+        {
+            this.ApartmentListView.Filter = this.ApartmentFilter;
+        }
+
+
+        protected bool ResetApartmentSearchCanExecute()
+        {
+            return this.ApartmentListView.Filter != null;
+        }
+
+        private void ResetApartmentSearchExecute()
+        {
+            this.ApartmentListView.Filter = null;
+            this.SearchedText = null;
+        }
+
+        protected bool ApartmentFilter(object obj)
+        {
+            ApartmentEntity apartment = obj as ApartmentEntity;
+
+            if (apartment == null)
+            {
+                throw new InvalidCastException("No RenterEntity");
+            }
+
+            switch (this.ApartmentTableSelectedSearch)
+            {
+
+                case ApartmenTableSearchTypes.PLZ:
+                    return apartment.PLZ.ToLower().Contains(this.SearchedText.ToLower());
+                case ApartmenTableSearchTypes.Place:
+                    return apartment.Place.ToLower().Contains(this.SearchedText.ToLower());
+                case ApartmenTableSearchTypes.Renter:
+                    return apartment.Renter.Name.ToLower().Contains(this.SearchedText.ToLower());
+                case ApartmenTableSearchTypes.State:
+                    return apartment.State.Description.ToLower().Contains(this.SearchedText.ToLower());
+                case ApartmenTableSearchTypes.Kind:
+                    return apartment.ApartmentKind.Description.ToLower().Contains(this.SearchedText.ToLower());
+                default:
+                    return false;
+            }
+        }
+
+        protected bool SearchApartmentsCanExecute()
+        {
+            return !string.IsNullOrWhiteSpace(this.SearchedText);
+        }
+
+        protected bool OpenInBrowserCanExecute()
+        {
+            if (this.SelectedApartment != null
+                && !string.IsNullOrWhiteSpace(this.SelectedApartment.Source))
+            {
+                return this.IsUrlValid(this.SelectedApartment.Source);
+            }
+
+            return false;
+            //return this.SelectedApartment != null;
+        }
+
+        protected void OpenInBrowserExecute()
+        {
+            try
+            {
+                Process.Start(this.SelectedApartment.Source);
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("Could not open Address", "Open in browser");
+            }
+        }
+
+        protected virtual bool GoToRenterCanExecute()
+        {
+            return this.SelectedApartment != null;
+        }
+
+        protected virtual void GoToRenterExecute()
+        {
+            this.RaiseOnGoToRenter();
+        }
+
         /// <summary>
         /// Saves the apartments execute.
         /// </summary>
@@ -72,7 +198,7 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
             try
             {
                 this._apartmentTableService.SaveApartments(this.ApartmentList);
-                MessageBox.Show("Apartments saved.");
+                MessageBox.Show("Apartments saved.", "Apartments");
             }
             catch (Exception ex)
             {
@@ -82,7 +208,17 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
 
         protected bool SaveApartmentsCanExecute()
         {
-            return true;
+            //foreach (ApartmentEntity apartment in this.ApartmentList)
+            //{
+            //    if (!apartment.IsValid())
+            //    {
+            //        return false;
+            //    }
+            //}
+
+            return ApartmentList.FirstOrDefault(f => f.EntityState == EntityState.Detached
+                                                  || f.EntityState == EntityState.Modified
+                                                  || f.EntityState == EntityState.Added) != null;
         }
         #endregion
 
@@ -123,6 +259,13 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
         #endregion
 
         #region - Public
+        #region - EventHandler
+
+        public delegate void GoToRenterEventHandler(RenterEntity renter);
+        public GoToRenterEventHandler OnGoToRenter;
+
+        #endregion
+
         #region - Properties
 
         /// <summary>
@@ -369,7 +512,7 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
             {
                 if (this._searchApartments == null)
                 {
-
+                    this._searchApartments = new DelegateCommand(() => this.SearchApartmentExecute(), () => this.SearchApartmentsCanExecute());
                 }
 
                 return this._searchApartments;
@@ -388,7 +531,7 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
             {
                 if (this._deleteApartment == null)
                 {
-
+                    this._deleteApartment = new DelegateCommand(() => this.DeleteApartmentExecute(), () => this.DeleteApartmentCanExecute());
                 }
 
                 return this._deleteApartment;
@@ -401,13 +544,13 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
         /// <value>
         /// The reset search.
         /// </value>
-        public ICommand ResetSearch
+        public ICommand ResetApartmentsSearch
         {
             get
             {
                 if (this._resetSearch == null)
                 {
-
+                    this._resetSearch = new DelegateCommand(() => this.ResetApartmentSearchExecute(), () => this.ResetApartmentSearchCanExecute());
                 }
 
                 return this._resetSearch;
@@ -426,7 +569,7 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
             {
                 if (this._openInBrowser == null)
                 {
-
+                    this._openInBrowser = new DelegateCommand(() => this.OpenInBrowserExecute(), () => this.OpenInBrowserCanExecute());
                 }
 
                 return this._openInBrowser;
@@ -445,7 +588,7 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
             {
                 if (this._goToRenter == null)
                 {
-
+                    this._goToRenter = new DelegateCommand(() => this.GoToRenterExecute(), () => this.GoToRenterCanExecute());
                 }
 
                 return this._goToRenter;

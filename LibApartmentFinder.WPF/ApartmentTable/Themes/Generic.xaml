@@ -1,10 +1,13 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:akli="clr-namespace:LibApartmentFinder.WPF.ApartmentKindList"
+                    xmlns:enums="clr-namespace:LibApartmentFinder.WPF.ApartmentTable.Enums"
                     xmlns:local="clr-namespace:LibApartmentFinder.WPF.ApartmentTable"
+                    xmlns:model="clr-namespace:LibApartmentFinder.WPF.ApartmentTable.ViewModels"
                     xmlns:rli="clr-namespace:LibApartmentFinder.WPF.RatingList"
                     xmlns:rta="clr-namespace:LibApartmentFinder.WPF.RenterTable"
                     xmlns:sli="clr-namespace:LibApartmentFinder.WPF.StateList"
+                    xmlns:sys="clr-namespace:System;assembly=mscorlib"
                     xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit">
     <Style TargetType="{x:Type local:ApartmentTable}">
         <Setter Property="Template">
@@ -13,42 +16,85 @@
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}">
-                        <Grid DataContext="{Binding Path=ApartmentTableDataContext, RelativeSource={RelativeSource TemplatedParent}}">
+                        <Border.Resources>
+                            <ObjectDataProvider x:Key="SearchApartmentList"
+                                                MethodName="GetNames"
+                                                ObjectType="{x:Type sys:Enum}">
+                                <ObjectDataProvider.MethodParameters>
+                                    <x:Type TypeName="enums:ApartmenTableSearchTypes" />
+                                </ObjectDataProvider.MethodParameters>
+                            </ObjectDataProvider>
+                        </Border.Resources>
+                        <Grid DataContext="{Binding ApartmentTableDataContext, RelativeSource={RelativeSource TemplatedParent}}">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="30" />
                                 <RowDefinition Height="40" />
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Menu Grid.Row="0">
-                                <MenuItem Command="{Binding Path=ReloadApartments, Mode=OneTime}" ToolTip="Refresh">
+                                <MenuItem Command="{Binding Path=ReloadApartments,
+                                                            Mode=OneTime}"
+                                          ToolTip="Refresh">
                                     <MenuItem.Icon>
                                         <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Refresh.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem Command="{Binding Path=SaveApartments, Mode=OneTime}" ToolTip="Save">
+                                <MenuItem Command="{Binding Path=SaveApartments,
+                                                            Mode=OneTime}"
+                                          ToolTip="Save">
                                     <MenuItem.Icon>
                                         <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Save.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem Command="{Binding Path=DeleteApartment, Mode=OneTime}" ToolTip="Delete">
+                                <MenuItem Command="{Binding Path=DeleteApartment,
+                                                            Mode=OneTime}"
+                                          ToolTip="Delete">
                                     <MenuItem.Icon>
                                         <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Delete.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem Command="{Binding Path=OpenInBrowser, Mode=OneTime}" ToolTip="Open in Browser">
+                                <MenuItem Command="{Binding Path=OpenInBrowser,
+                                                            Mode=OneTime}"
+                                          ToolTip="Open in Browser">
                                     <MenuItem.Icon>
                                         <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Webbrowser.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </Menu>
                             <WrapPanel Grid.Row="1">
-                                <TextBlock Margin="5,5" Text="Search for:" />
-                                <ComboBox Margin="5,5" />
-                                <TextBox Width="200" Margin="5,5" />
-                                <Button Margin="5,5" Command="{Binding Path=SearchApartments, Mode=OneTime}">
+                                <TextBlock Margin="5,5"
+                                           Text="Search for:" />
+                                <ComboBox Width="150"
+                                          Margin="5,5"
+                                          ItemsSource="{Binding Source={StaticResource ResourceKey=SearchApartmentList}}"
+                                          SelectedIndex="0"
+                                          SelectedItem="{Binding Path=ApartmentTableSelectedSearch,
+                                                                 Mode=OneWayToSource,
+                                                                 UpdateSourceTrigger=PropertyChanged}" />
+                                <TextBox Width="200"
+                                         Margin="5,5"
+                                         Text="{Binding Path=SearchedText,
+                                                        Mode=TwoWay,
+                                                        UpdateSourceTrigger=PropertyChanged}">
+                                    <TextBox.InputBindings>
+                                        <KeyBinding Key="Enter"
+                                                    Command="{Binding Path=SearchApartments,
+                                                                      Mode=OneTime}" />
+                                    </TextBox.InputBindings>
+                                </TextBox>
+                                <Button Margin="5,5"
+                                        Command="{Binding Path=SearchApartments,
+                                                          Mode=OneTime}">
                                     <Image Width="16"
                                            Height="16"
                                            Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Search.png" />
+                                </Button>
+                                <Button Margin="5,5"
+                                        Command="{Binding Path=ResetApartmentsSearch,
+                                                          Mode=OneTime}">
+                                    <Image Width="16"
+                                           Height="16"
+                                           Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Delete.png" />
                                 </Button>
                             </WrapPanel>
                             <DataGrid Grid.Row="2"
@@ -60,6 +106,16 @@
                                                              Mode=TwoWay,
                                                              UpdateSourceTrigger=PropertyChanged}"
                                       SelectionMode="Single">
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                        <MenuItem Command="{Binding Path=OpenInBrowser,
+                                                                    Mode=OneTime}"
+                                                  Header="Open in Browser" />
+                                        <MenuItem Command="{Binding Path=GoToRenter,
+                                                                    Mode=OneTime}"
+                                                  Header="Go to Renter" />
+                                    </ContextMenu>
+                                </DataGrid.ContextMenu>
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn Width="50"
                                                             CanUserSort="True"
@@ -151,7 +207,9 @@
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellEditingTemplate>
                                     </DataGridTemplateColumn>
-                                    <DataGridTemplateColumn Width="200" Header="Renter">
+                                    <DataGridTemplateColumn Width="200"
+                                                            Header="Renter"
+                                                            SortMemberPath="Renter.Name">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Path=Renter.Name}" />
@@ -206,7 +264,9 @@
                                         </DataGridTemplateColumn.CellTemplate>
                                         <DataGridTemplateColumn.CellEditingTemplate>
                                             <DataTemplate>
-                                                <xctk:DecimalUpDown Increment=".5" Value="{Binding Path=Price, Mode=TwoWay}" />
+                                                <xctk:DecimalUpDown Increment=".5"
+                                                                    Value="{Binding Path=Price,
+                                                                                    Mode=TwoWay}" />
                                             </DataTemplate>
                                         </DataGridTemplateColumn.CellEditingTemplate>
                                     </DataGridTemplateColumn>
@@ -228,7 +288,7 @@
                                     <DataGridTemplateColumn Width="100"
                                                             CanUserSort="True"
                                                             Header="Rating"
-                                                            SortMemberPath="Rating">
+                                                            SortMemberPath="Rating.Description">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Path=Rating.Description}" />
@@ -243,7 +303,7 @@
                                     <DataGridTemplateColumn Width="200"
                                                             CanUserSort="True"
                                                             Header="State"
-                                                            SortMemberPath="State">
+                                                            SortMemberPath="State.Description">
                                         <DataGridTemplateColumn.CellTemplate>
                                             <DataTemplate>
                                                 <TextBlock Text="{Binding Path=State.Description}" />

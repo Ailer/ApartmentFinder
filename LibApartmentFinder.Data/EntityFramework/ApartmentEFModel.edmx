@@ -341,19 +341,20 @@
         <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="Kein" />
         <DesignerProperty Name="UseLegacyProvider" Value="True" />
+        <DesignerProperty Name="SynchronizePropertyFacets" Value="True" />
       </DesignerInfoPropertySet>
     </Options>
     <!-- Diagram content (shape and connector positions) -->
     <Diagrams>
       <Diagram DiagramId="ebdf5348094c46469733f940e8c0828f" Name="Diagramm1">
-        <EntityTypeShape EntityType="ApartmentDBModel.ApartmentEntity" Width="1.5" PointX="3" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="ApartmentDBModel.ApartmentEntity" Width="2.25" PointX="3" PointY="1" IsExpanded="true" />
         <EntityTypeShape EntityType="ApartmentDBModel.RatingEntity" Width="1.5" PointX="0.75" PointY="5.625" IsExpanded="true" />
         <EntityTypeShape EntityType="ApartmentDBModel.RenterEntity" Width="1.5" PointX="0.75" PointY="8" IsExpanded="true" />
         <EntityTypeShape EntityType="ApartmentDBModel.StateEntity" Width="1.5" PointX="0.75" PointY="10.875" IsExpanded="true" />
         <AssociationConnector Association="ApartmentDBModel.FK_Apartment_Rating" ManuallyRouted="false" />
         <AssociationConnector Association="ApartmentDBModel.FK_Apartment_Renter" ManuallyRouted="false" />
         <AssociationConnector Association="ApartmentDBModel.FK_Apartment_State" ManuallyRouted="false" />
-        <EntityTypeShape EntityType="ApartmentDBModel.ApartmentKindEntity" Width="1.5" PointX="5.375" PointY="0.875" />
+        <EntityTypeShape EntityType="ApartmentDBModel.ApartmentKindEntity" Width="1.5" PointX="6.5" PointY="1" />
         <AssociationConnector Association="ApartmentDBModel.FK_Apartment_ApartmentKind" />
       </Diagram>
     </Diagrams>

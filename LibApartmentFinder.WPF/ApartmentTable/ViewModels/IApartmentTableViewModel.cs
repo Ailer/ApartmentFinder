@@ -68,7 +68,7 @@ namespace LibApartmentFinder.WPF.ApartmentTable.ViewModels
         /// <value>
         /// The reset search.
         /// </value>
-        ICommand ResetSearch { get; }
+        ICommand ResetApartmentsSearch { get; }
 
         /// <summary>
         /// Gets the open in browser.

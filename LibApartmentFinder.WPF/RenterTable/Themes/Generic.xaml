@@ -6,7 +6,8 @@
     <Style TargetType="{x:Type local:RenterTable}">
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate x:Name="T" TargetType="{x:Type local:RenterTable}">
+                <ControlTemplate x:Name="T"
+                                 TargetType="{x:Type local:RenterTable}">
                     <Border Background="{TemplateBinding Background}"
                             BorderBrush="{TemplateBinding BorderBrush}"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -29,40 +30,52 @@
                                 <RowDefinition Height="*" />
                             </Grid.RowDefinitions>
                             <Menu Grid.Row="0">
-                                <MenuItem Command="{Binding Path=LoadRenters, Mode=OneTime}" ToolTip="Refresh">
+                                <MenuItem Command="{Binding Path=LoadRenters,
+                                                            Mode=OneTime}"
+                                          ToolTip="Refresh">
                                     <MenuItem.Icon>
                                         <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Refresh.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem Command="{Binding Path=SaveRenters, Mode=OneTime}" ToolTip="Save">
+                                <MenuItem Command="{Binding Path=SaveRenters,
+                                                            Mode=OneTime}"
+                                          ToolTip="Save">
                                     <MenuItem.Icon>
                                         <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Save.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
-                                <MenuItem Command="{Binding Path=DeleteRenter, Mode=OneTime}" ToolTip="Delete">
+                                <MenuItem Command="{Binding Path=DeleteRenter,
+                                                            Mode=OneTime}"
+                                          ToolTip="Delete">
                                     <MenuItem.Icon>
                                         <Image Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Delete.png" />
                                     </MenuItem.Icon>
                                 </MenuItem>
                             </Menu>
                             <WrapPanel Grid.Row="1">
-                                <TextBlock Margin="5,5" Text="Search for:" />
-                                <ComboBox Width="200"
+                                <TextBlock Margin="5,5"
+                                           Text="Search for:" />
+                                <ComboBox Width="150"
                                           Margin="5,5"
                                           ItemsSource="{Binding Source={StaticResource SearchRenterList}}"
                                           SelectedIndex="0"
-                                          SelectedItem="{Binding Path=RenterTableSearchType,
-                                                                 Mode=TwoWay}" />
+                                          SelectedItem="{Binding Path=RenterTableSelectedSearch,
+                                                                 Mode=TwoWay,
+                                                                 UpdateSourceTrigger=PropertyChanged}" />
                                 <TextBox Width="200"
                                          Margin="5,5"
                                          Text="{Binding Path=SearchedText,
                                                         Mode=TwoWay,
                                                         UpdateSourceTrigger=PropertyChanged}">
                                     <TextBox.InputBindings>
-                                        <KeyBinding Key="Enter" Command="{Binding Path=SearchRenter, Mode=OneTime}" />
+                                        <KeyBinding Key="Enter"
+                                                    Command="{Binding Path=SearchRenter,
+                                                                      Mode=OneTime}" />
                                     </TextBox.InputBindings>
                                 </TextBox>
-                                <Button Margin="5,5" Command="{Binding Path=SearchRenter, Mode=OneTime}">
+                                <Button Margin="5,5"
+                                        Command="{Binding Path=SearchRenter,
+                                                          Mode=OneTime}">
                                     <Image Width="16"
                                            Height="16"
                                            Source="pack://application:,,,/LibApartmentFinder.Infastructure;component/Images/Search.png" />
@@ -87,6 +100,13 @@
                                                              Mode=TwoWay,
                                                              UpdateSourceTrigger=PropertyChanged}"
                                       SelectionMode="Single">
+                                <DataGrid.ContextMenu>
+                                    <ContextMenu DataContext="{Binding Path=PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                                        <MenuItem Command="{Binding Path=ShowApartments,
+                                                                    Mode=OneTime}"
+                                                  Header="Show Apartments" />
+                                    </ContextMenu>
+                                </DataGrid.ContextMenu>
                                 <DataGrid.Columns>
                                     <DataGridTemplateColumn CanUserSort="True"
                                                             Header="Name"

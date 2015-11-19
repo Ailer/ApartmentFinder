@@ -13,7 +13,6 @@ using LibApartmentFinder.Data.EntityFramework;
 using System.Windows;
 using System.Data.Entity;
 using LibApartmentFinder.WPF.RenterTable.Enums;
-using LibApartmentFinder.Data.Validators;
 using FluentValidation;
 using Microsoft.Practices.ServiceLocation;
 
@@ -34,7 +33,7 @@ namespace LibApartmentFinder.WPF.RenterTable.ViewModels
         private ICommand _deleteRenter;
         private ICommand _searchRenter;
         private ICommand _resetSearch;
-        private ICommand _contactRenter;
+        private ICommand _showApartments;
         protected RenterTableSearchTypes _renterTableSelectedSearch;
 
         #endregion
@@ -179,12 +178,31 @@ namespace LibApartmentFinder.WPF.RenterTable.ViewModels
         /// <summary>
         /// Called when [renter changed].
         /// </summary>
-        protected virtual void OnRenterChanged()
+        protected virtual void RaiseOnRenterChanged()
         {
             if (this.SelectedRenterChanged != null)
             {
                 this.SelectedRenterChanged();
             }
+        }
+
+        protected virtual void RaiseOnShowApartments()
+        {
+            if (this.OnShowApartments != null)
+            {
+                this.OnShowApartments(this.SelectedRenter);
+            }
+        }
+
+
+        protected virtual bool ShowApartmentsCanExecute()
+        {
+            return this.SelectedRenter != null;
+        }
+
+        protected virtual void ShowApartmentsExecute()
+        {
+            this.RaiseOnShowApartments();
         }
         #endregion
         #endregion
@@ -194,6 +212,8 @@ namespace LibApartmentFinder.WPF.RenterTable.ViewModels
 
         public delegate void RenterChangedEventHandler();
         public event RenterChangedEventHandler SelectedRenterChanged;
+        public delegate void ShowApartmentsEventHandler(RenterEntity renter);
+        public event ShowApartmentsEventHandler OnShowApartments;
 
         #endregion
 
@@ -248,7 +268,7 @@ namespace LibApartmentFinder.WPF.RenterTable.ViewModels
                 if (this._selectedRenter != value)
                 {
                     this._selectedRenter = value;
-                    this.OnRenterChanged();
+                    this.RaiseOnRenterChanged();
                     base.OnPropertyChanged(() => this.SelectedRenter);
                 }
             }
@@ -361,11 +381,16 @@ namespace LibApartmentFinder.WPF.RenterTable.ViewModels
 
         }
 
-        public ICommand ContactRenter
+        public ICommand ShowApartments
         {
             get
             {
-                return this._contactRenter;
+                if (this._showApartments == null)
+                {
+                    this._showApartments = new DelegateCommand(() => this.ShowApartmentsExecute(), () => this.ShowApartmentsCanExecute());
+                }
+
+                return this._showApartments;
             }
         }
         #endregion
@@ -380,6 +405,7 @@ namespace LibApartmentFinder.WPF.RenterTable.ViewModels
 
             this._renterTableService = renterTableSerivce;
             this.LoadRentersExecute();
+            this.RenterTableSelectedSearch = RenterTableSearchTypes.EMail;
         }
         #endregion
         #endregion

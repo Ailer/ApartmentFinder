@@ -17,6 +17,8 @@ namespace LibApartmentFinder.Data.Validators
             base.RuleFor(r => r.Street).NotEmpty();
             base.RuleFor(r => r.Streetnumber).NotEmpty();
             base.RuleFor(r => r.Streetnumber).Length(1, 5);
+            base.RuleFor(r => r.ApartmentKindID).GreaterThan(0);
+            base.RuleFor(r => r.RenterID).GreaterThan(0);
         }
     }
 }

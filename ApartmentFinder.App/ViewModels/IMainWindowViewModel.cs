@@ -12,9 +12,9 @@ namespace ApartmentFinder.App.ViewModels
     {
         #region - Properties
 
-        IApartmentTableViewModel ApartmentTableDataContext { get; }
+        ApartmentTableViewModel ApartmentTableDataContext { get; }
 
-        IRenterTableViewModel RenterTableDataContext { get; }
+        RenterTableViewModel RenterTableDataContext { get; }
 
         #endregion
     }

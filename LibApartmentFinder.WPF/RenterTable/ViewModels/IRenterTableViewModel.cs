@@ -70,7 +70,7 @@ namespace LibApartmentFinder.WPF.RenterTable.ViewModels
         /// <value>
         /// The contact renter.
         /// </value>
-        ICommand ContactRenter { get; }
+        ICommand ShowApartments { get; }
 
         #endregion
         #endregion

@@ -8,5 +8,10 @@ namespace LibApartmentFinder.WPF.ApartmentTable.Enums
 {
     public enum ApartmenTableSearchTypes
     {
+        Renter,
+        PLZ,
+        Place,
+        State,
+        Kind
     }
 }
